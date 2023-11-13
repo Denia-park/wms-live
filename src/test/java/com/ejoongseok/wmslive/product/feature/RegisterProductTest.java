@@ -3,20 +3,32 @@ package com.ejoongseok.wmslive.product.feature;
 import com.ejoongseok.wmslive.product.domain.Category;
 import com.ejoongseok.wmslive.product.domain.ProductRepository;
 import com.ejoongseok.wmslive.product.domain.TemperatureZone;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RegisterProductTest {
-
+    @LocalServerPort
+    private int port;
     private RegisterProduct registerProduct;
+    @Autowired
     private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
-        productRepository = new ProductRepository();
+        if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
+            RestAssured.port = port;
+        }
+
         registerProduct = new RegisterProduct(productRepository);
     }
 
@@ -53,7 +65,14 @@ class RegisterProductTest {
         );
 
         //when
-        registerProduct.request(request);
+//        registerProduct.request(request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/products")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
 
         //then
         assertThat(productRepository.findAll()).hasSize(1);

@@ -57,7 +57,6 @@ public class Product {
         Assert.notNull(category, "카테고리는 필수입니다.");
         Assert.notNull(temperatureZone, "온도대는 필수입니다.");
         Assert.notNull(weightInGrams, "무게는 필수입니다.");
-        Assert.notNull(this, "상품크기는 필수입니다.");
     }
 
     public void assignId(final Long id) {
