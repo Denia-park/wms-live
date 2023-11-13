@@ -21,9 +21,18 @@ public class RegisterProduct {
     @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
     public void request(@RequestBody final Request request) {
-        // request에서 필요한 값들을 꺼내서 상품 도메인을 생성하고 저장한다.
-        Product product = request.toDomain();
+        validateProductCodeExists(request.code);
+        final Product product = request.toDomain();
         productRepository.save(product);
+    }
+
+    private void validateProductCodeExists(final String code) {
+        productRepository.findAll().stream()
+                .filter(product -> product.getCode().equals(code))
+                .findFirst()
+                .ifPresent(product -> {
+                    throw new IllegalArgumentException("이미 등록된 상품코드입니다. %s".formatted(code));
+                });
     }
 
     public record Request(
