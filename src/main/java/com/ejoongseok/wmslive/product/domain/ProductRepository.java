@@ -1,11 +1,11 @@
-package com.ejoongseok.wmslive.product.feature;
+package com.ejoongseok.wmslive.product.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class ProductRepository {
+public class ProductRepository {
     private final Map<Long, Product> products = new HashMap<>();
     private Long nextId = 1L;
 

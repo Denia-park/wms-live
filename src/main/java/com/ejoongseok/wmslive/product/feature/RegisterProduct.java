@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.product.feature;
 
+import com.ejoongseok.wmslive.product.domain.*;
 import org.springframework.util.Assert;
 
 class RegisterProduct {
