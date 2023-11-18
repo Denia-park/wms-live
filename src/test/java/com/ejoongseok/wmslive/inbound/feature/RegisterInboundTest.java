@@ -1,30 +1,31 @@
 package com.ejoongseok.wmslive.inbound.feature;
 
+import com.ejoongseok.wmslive.common.ApiTest;
 import com.ejoongseok.wmslive.inbound.domain.InboundRepository;
 import com.ejoongseok.wmslive.product.domain.ProductRepository;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ejoongseok.wmslive.product.fixture.ProductFixture.aProductFixture;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.mock;
 
-class RegisterInboundTest {
-    private RegisterInbound registerInbound;
+class RegisterInboundTest extends ApiTest {
+    @MockBean
     private ProductRepository productRepository;
+    @Autowired
     private InboundRepository inboundRepository;
 
-    @BeforeEach
-    void setUp() {
-        productRepository = mock(ProductRepository.class);
-        inboundRepository = new InboundRepository();
-        registerInbound = new RegisterInbound(productRepository, inboundRepository);
-    }
+    //setup을 2개 쓰고 싶으면 이름을 다르게 해야함 [동일하면 Override가 되기 때문에]
 
     @Test
     @DisplayName("입고를 등록한다.")
@@ -52,7 +53,14 @@ class RegisterInboundTest {
                 inboundItems
         );
 
-        //when
-        registerInbound.request(request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/inbounds")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+
+        assertThat(inboundRepository.findAll()).hasSize(1);
     }
 }
