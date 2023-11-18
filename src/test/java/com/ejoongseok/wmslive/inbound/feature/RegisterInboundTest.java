@@ -9,7 +9,6 @@ import org.mockito.BDDMockito;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.ejoongseok.wmslive.product.fixture.ProductFixture.aProductFixture;
 import static org.mockito.Mockito.anyLong;
@@ -31,8 +30,8 @@ class RegisterInboundTest {
     @DisplayName("입고를 등록한다.")
     void registerInbound() {
         //given
-        BDDMockito.given(productRepository.findById(anyLong()))
-                .willReturn(Optional.of(aProductFixture().build()));
+        BDDMockito.given(productRepository.getBy(anyLong()))
+                .willReturn(aProductFixture().build());
         final LocalDateTime orderRequestedAt = LocalDateTime.now();
         final LocalDateTime estimatedArrivalAt = LocalDateTime.now().plusDays(1);
         final Long productNo = 1L;
