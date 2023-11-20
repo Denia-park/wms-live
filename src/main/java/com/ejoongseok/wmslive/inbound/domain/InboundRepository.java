@@ -1,23 +1,6 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-@Component
-public class InboundRepository {
-    private final Map<Long, Inbound> inboundMap = new HashMap<>();
-    private Long sequence = 1L;
-
-    public void save(final Inbound inbound) {
-        inbound.assignId(sequence++);
-        inboundMap.put(inbound.getId(), inbound);
-    }
-
-    public List<Inbound> findAll() {
-        return new ArrayList<>(inboundMap.values());
-    }
+public interface InboundRepository extends JpaRepository<Inbound, Long> {
 }
