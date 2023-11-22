@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
 import com.ejoongseok.wmslive.product.domain.Product;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,6 +47,16 @@ public class InboundItem {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.description = description;
+    }
+
+    @VisibleForTesting
+    InboundItem(final Long inboundItemNo,
+                final Product product,
+                final Long quantity,
+                final Long unitPrice,
+                final String description) {
+        this(product, quantity, unitPrice, description);
+        this.inboundItemNo = inboundItemNo;
     }
 
     private void validateConstructor(final Product product,

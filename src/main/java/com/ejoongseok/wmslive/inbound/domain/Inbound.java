@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -60,6 +61,18 @@ public class Inbound {
             this.inboundItems.add(inboundItem);
             inboundItem.assignInbound(this);
         }
+    }
+
+    @VisibleForTesting
+    Inbound(
+            final Long inboundNo,
+            final String title,
+            final String description,
+            final LocalDateTime orderRequestedAt,
+            final LocalDateTime estimatedArrivalAt,
+            final List<InboundItem> inboundItems) {
+        this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
+        this.inboundNo = inboundNo;
     }
 
     private void validateConstructor(final String title,

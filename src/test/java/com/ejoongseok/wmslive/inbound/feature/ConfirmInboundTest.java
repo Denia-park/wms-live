@@ -1,22 +1,18 @@
 package com.ejoongseok.wmslive.inbound.feature;
 
 import com.ejoongseok.wmslive.inbound.domain.Inbound;
-import com.ejoongseok.wmslive.inbound.domain.InboundItem;
+import com.ejoongseok.wmslive.inbound.domain.InboundFixture;
 import com.ejoongseok.wmslive.inbound.domain.InboundRepository;
 import com.ejoongseok.wmslive.inbound.domain.InboundStatus;
-import com.ejoongseok.wmslive.product.fixture.ProductFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConfirmInboundTest {
-
+    private final InboundFixture inboundFixture = new InboundFixture();
     private ConfirmInbound confirmInbound;
     private InboundRepository inboundRepository;
 
@@ -31,20 +27,7 @@ class ConfirmInboundTest {
     void confirmInbound() {
         //given
         final Long inboundNo = 1L;
-        final Inbound inbound = new Inbound(
-                "title",
-                "description",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1),
-                List.of(
-                        new InboundItem(
-                                ProductFixture.aProductFixture().build(),
-                                1L,
-                                1500L,
-                                "description"
-                        )
-                )
-        );
+        final Inbound inbound = InboundFixture.aInbound().build();
         Mockito.when(inboundRepository.getBy(inboundNo))
                 .thenReturn(inbound);
 
