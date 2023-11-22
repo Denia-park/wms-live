@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,6 +38,10 @@ public class Inbound {
     @Column(name = "estimated_arrival_at", nullable = false)
     @Comment("입고 예정일시")
     private LocalDateTime estimatedArrivalAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Comment("입고 진행 상태")
+    private InboundStatus status = InboundStatus.REQUESTED;
 
     public Inbound(final String title,
                    final String description,
@@ -58,6 +63,20 @@ public class Inbound {
         }
     }
 
+    @VisibleForTesting
+    Inbound(
+            final Long inboundNo,
+            final String title,
+            final String description,
+            final LocalDateTime orderRequestedAt,
+            final LocalDateTime estimatedArrivalAt,
+            final List<InboundItem> inboundItems,
+            final InboundStatus inboundStatus) {
+        this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
+        this.inboundNo = inboundNo;
+        this.status = inboundStatus;
+    }
+
     private void validateConstructor(final String title,
                                      final String description,
                                      final LocalDateTime orderRequestedAt,
@@ -68,5 +87,17 @@ public class Inbound {
         Assert.notNull(orderRequestedAt, "입고 요청일은 필수입니다");
         Assert.notNull(estimatedArrivalAt, "입고 예정일은 필수입니다");
         Assert.notEmpty(inboundItems, "입고 품목은 필수입니다");
+    }
+
+    public void confirmed() {
+        validateConfirmStatus();
+
+        this.status = InboundStatus.CONFIRMED;
+    }
+
+    private void validateConfirmStatus() {
+        if (this.status != InboundStatus.REQUESTED) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다.");
+        }
     }
 }
