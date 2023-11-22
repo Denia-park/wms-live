@@ -37,6 +37,10 @@ public class Inbound {
     @Column(name = "estimated_arrival_at", nullable = false)
     @Comment("입고 예정일시")
     private LocalDateTime estimatedArrivalAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Comment("입고 진행 상태")
+    private InboundStatus status = InboundStatus.REQUESTED;
 
     public Inbound(final String title,
                    final String description,
@@ -68,5 +72,13 @@ public class Inbound {
         Assert.notNull(orderRequestedAt, "입고 요청일은 필수입니다");
         Assert.notNull(estimatedArrivalAt, "입고 예정일은 필수입니다");
         Assert.notEmpty(inboundItems, "입고 품목은 필수입니다");
+    }
+
+    public void confirmed() {
+        if (this.status != InboundStatus.REQUESTED) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다.");
+        }
+
+        this.status = InboundStatus.CONFIRMED;
     }
 }
