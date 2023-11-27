@@ -61,7 +61,7 @@ class InboundTest {
 
         //when, then
         assertThatThrownBy(() -> {
-            confirmedInbound.reject("rejectReason");
+            confirmedInbound.reject("rejectionReason");
         })
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("입고 요청 상태가 아닙니다.");
