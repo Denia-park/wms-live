@@ -9,12 +9,19 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "inbound_item")
 @Comment("입고 상품")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class InboundItem {
+    @OneToMany(mappedBy = "inboundItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Comment("LPN")
+    private final List<LPN> lpnList = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inbound_item_no")
@@ -78,5 +85,26 @@ public class InboundItem {
     public void assignInbound(final Inbound inbound) {
         Assert.notNull(inbound, "입고는 필수입니다.");
         this.inbound = inbound;
+    }
+
+    public void registerLPN(final String lpnBarcode, final LocalDateTime expirationAt) {
+        validateRegisterLPN(lpnBarcode, expirationAt);
+        lpnList.add(newLPN(lpnBarcode, expirationAt));
+    }
+
+    private void validateRegisterLPN(final String lpnBarcode, final LocalDateTime expirationAt) {
+        Assert.hasText(lpnBarcode, "LPN 바코드는 필수입니다.");
+        Assert.notNull(expirationAt, "유통기한는 필수입니다.");
+    }
+
+    private LPN newLPN(final String lpnBarcode, final LocalDateTime expirationAt) {
+        return new LPN(lpnBarcode,
+                expirationAt,
+                this);
+    }
+
+    @VisibleForTesting
+    public List<LPN> testingLpnList() {
+        return lpnList;
     }
 }
