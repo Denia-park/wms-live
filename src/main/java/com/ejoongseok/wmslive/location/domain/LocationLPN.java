@@ -10,15 +10,15 @@ public class LocationLPN {
     public LocationLPN(final Location location, final LPN lpn) {
         this.location = location;
         this.lpn = lpn;
-        inventoryQuantity = 1L;
+        this.inventoryQuantity = 1L;
     }
 
     public void increaseQuantity() {
-        inventoryQuantity++;
+        this.inventoryQuantity++;
     }
 
     public Long getInventoryQuantity() {
-        return inventoryQuantity;
+        return this.inventoryQuantity;
     }
 
     boolean matchLpnToLocation(final LPN lpn) {
