@@ -7,11 +7,15 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "location")
 @Comment("로케이션")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location {
+    private final List<LocationLPN> locationLPNList = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "location_no")
@@ -28,7 +32,6 @@ public class Location {
     @Column(name = "usage_purpose")
     @Comment("보관 목적")
     private UsagePurpose usagePurpose;
-//    private List<LocationLPN> locationLPNList = new ArrayList<>();
 
     public Location(final String locationBarcode,
                     final StorageType storageType,
@@ -46,10 +49,20 @@ public class Location {
         Assert.notNull(usagePurpose, "usagePurpose는 필수입니다.");
     }
 
+    public List<LocationLPN> getLocationLPNList() {
+        return locationLPNList;
+    }
+
     public void assignLPN(final LPN lpn) {
         Assert.notNull(lpn, "lpn는 필수입니다.");
 
-//        locationLPNList
+        locationLPNList.stream()
+                .filter(locationLPN -> locationLPN.getLpn().equals(lpn))
+                .findFirst()
+                .ifPresentOrElse(
+                        LocationLPN::increaseQuantity,
+                        () -> locationLPNList.add(new LocationLPN(this, lpn))
+                );
 
     }
 }
