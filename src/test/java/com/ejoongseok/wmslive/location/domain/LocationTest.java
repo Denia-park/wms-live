@@ -5,6 +5,8 @@ import com.ejoongseok.wmslive.inbound.domain.LPNFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LocationTest {
@@ -18,8 +20,15 @@ class LocationTest {
 
         location.assignLPN(lpn);
 
-        assertThat(location.getLocationLPNList()).hasSize(1);
-        assertThat(location.getLocationLPNList().get(0).getInventoryQuantity()).isEqualTo(1);
+        assertAssignLPN(location, 1L);
+    }
+
+    private void assertAssignLPN(final Location location, final Long expectedInventoryQuantity) {
+        final List<LocationLPN> locationLPNList = location.getLocationLPNList();
+        final LocationLPN locationLPN = locationLPNList.get(0);
+
+        assertThat(locationLPNList).hasSize(1);
+        assertThat(locationLPN.getInventoryQuantity()).isEqualTo(expectedInventoryQuantity);
     }
 
     @Test
@@ -27,13 +36,12 @@ class LocationTest {
     void already_exists_assignLPN() {
         final Location location = LocationFixture.aLocation().build();
 
-        final LPN lpn = LPNFixture.anLPN().lpnBarcode("LPNBARCODE").build();
-        final LPN lpn2 = LPNFixture.anLPN().lpnBarcode("LPNBARCODE").build();
+        final LPN lpn = LPNFixture.anLPN().build();
+        final LPN lpn2 = LPNFixture.anLPN().build();
 
         location.assignLPN(lpn);
         location.assignLPN(lpn2);
 
-        assertThat(location.getLocationLPNList()).hasSize(1);
-        assertThat(location.getLocationLPNList().get(0).getInventoryQuantity()).isEqualTo(2);
+        assertAssignLPN(location, 2L);
     }
 }
