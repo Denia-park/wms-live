@@ -19,6 +19,7 @@ class RegisterLocationTest {
     @DisplayName("로케이션을 등록한다")
     void registerLocation() {
         //given
+        registerLocation.request();
 
 
         //when
@@ -29,5 +30,8 @@ class RegisterLocationTest {
     }
 
     private class RegisterLocation {
+        public void request() {
+            throw new UnsupportedOperationException("RegisterLocation::request not implemented yet");
+        }
     }
 }
