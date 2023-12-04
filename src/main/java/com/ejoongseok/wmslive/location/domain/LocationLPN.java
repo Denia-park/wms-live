@@ -17,11 +17,11 @@ public class LocationLPN {
         inventoryQuantity++;
     }
 
-    public LPN getLpn() {
-        return this.lpn;
-    }
-
     public Long getInventoryQuantity() {
         return inventoryQuantity;
+    }
+
+    boolean matchLpnToLocation(final LPN lpn) {
+        return this.lpn.equals(lpn);
     }
 }
