@@ -5,13 +5,10 @@ import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationLPN;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,8 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AssignLocationLPNTest extends ApiTest {
-    @Autowired
-    private AssignLocationLPN assignLocationLPN;
+    private final AssignLocationLPNApi assignLocationLPNApi = new AssignLocationLPNApi();
 
     @Autowired
     private LocationRepository locationRepository;
@@ -39,23 +35,8 @@ class AssignLocationLPNTest extends ApiTest {
     @DisplayName("로케이션에 LPN을 할당한다.")
     @Transactional
     void assignLocationLPN() {
-        //given
-        final String locationBarcode = "A-1-1";
-        final String lpnBarcode = "LPN-0001";
-        final AssignLocationLPN.Request request = new AssignLocationLPN.Request(
-                locationBarcode,
-                lpnBarcode
-        );
+        final String locationBarcode = assignLocationLPNApi.assignLocationLPN();
 
-        //when
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
-                .when()
-                .post("/locations/assign-lpn")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value());
-        
         //then
         final Location location = locationRepository.getByLocationBarcode(locationBarcode);
         final List<LocationLPN> locationLPNList = location.getLocationLPNList();
@@ -64,5 +45,4 @@ class AssignLocationLPNTest extends ApiTest {
         assertThat(location.getLocationLPNList()).hasSize(1);
         assertThat(locationLPN.getInventoryQuantity()).isEqualTo(1L);
     }
-
 }
