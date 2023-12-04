@@ -1,5 +1,7 @@
 package com.ejoongseok.wmslive.location.feature;
 
+import com.ejoongseok.wmslive.inbound.domain.LPN;
+import com.ejoongseok.wmslive.inbound.domain.LPNRepository;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,9 +38,15 @@ class AssignLocationLPNTest {
 
     private class AssignLocationLPN {
         private LocationRepository locationRepository;
+        private LPNRepository lpnRepository;
 
         public void assignLocationLPN(final Request request) {
             final Location location = locationRepository.getByLocationBarcode(request.locationBarcode);
+            final LPN lpn = getByLpnBarcode(request);
+        }
+
+        private LPN getByLpnBarcode(final Request request) {
+            return lpnRepository.findByLpnBarcode(request.lpnBarcode).orElseThrow();
         }
 
         public record Request(String locationBarcode, String lpnBarcode) {
