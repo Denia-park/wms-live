@@ -16,6 +16,7 @@ import java.util.Optional;
 @Comment("로케이션")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location {
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<LocationLPN> locationLPNList = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
