@@ -5,6 +5,8 @@ import com.ejoongseok.wmslive.inbound.domain.LPNFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class LocationTest {
 
     @Test
@@ -15,5 +17,7 @@ class LocationTest {
         final LPN lpn = LPNFixture.anLPN().build();
 
         location.assignLPN(lpn);
+
+        assertThat(location.getLocationLPNList()).hasSize(1);
     }
 }
