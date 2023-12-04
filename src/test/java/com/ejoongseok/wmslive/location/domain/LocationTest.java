@@ -1,11 +1,9 @@
 package com.ejoongseok.wmslive.location.domain;
 
-import com.ejoongseok.wmslive.inbound.domain.InboundItemFixture;
 import com.ejoongseok.wmslive.inbound.domain.LPN;
+import com.ejoongseok.wmslive.inbound.domain.LPNFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
 
 class LocationTest {
 
@@ -14,23 +12,16 @@ class LocationTest {
     void assignLPN() {
         final Location location = createLocation();
 
-        final LPN lpn = createLPN();
+        final LPN lpn = LPNFixture.anLPN().build();
 
         location.assignLPN(lpn);
-    }
-
-    private LPN createLPN() {
-        final LocalDateTime expirationAt = LocalDateTime.now().plusDays(1);
-        final String lpnBarcode = "LPN-1";
-        final LPN lpn = new LPN(lpnBarcode, expirationAt, InboundItemFixture.aInboundItem().build());
-        return lpn;
     }
 
     private Location createLocation() {
         final String locationBarcode = "A-1-1";
         final StorageType storageType = StorageType.TOTE;
         final UsagePurpose usagePurpose = UsagePurpose.MOVE;
-        final Location location = new Location(locationBarcode, storageType, usagePurpose);
-        return location;
+
+        return new Location(locationBarcode, storageType, usagePurpose);
     }
 }
