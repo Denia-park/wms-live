@@ -3,8 +3,7 @@ package com.ejoongseok.wmslive.location.feature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.util.Assert;
 
 class RegisterLocationTest {
 
@@ -28,6 +27,7 @@ class RegisterLocationTest {
                 storageType,
                 usagePurpose
         );
+
         registerLocation.request(request);
 
 
@@ -35,7 +35,6 @@ class RegisterLocationTest {
 
 
         //then
-        assertThat(19).isEqualTo();
     }
 
     private enum StorageType {
@@ -56,12 +55,41 @@ class RegisterLocationTest {
         }
     }
 
+    private static class Location {
+        private final String locationBarcode;
+        private final StorageType storageType;
+        private final UsagePurpose usagePurpose;
+
+        public Location(final String locationBarcode,
+                        final StorageType storageType,
+                        final UsagePurpose usagePurpose) {
+            validateConstructor(locationBarcode, storageType, usagePurpose);
+
+            this.locationBarcode = locationBarcode;
+            this.storageType = storageType;
+            this.usagePurpose = usagePurpose;
+        }
+
+        private void validateConstructor(final String locationBarcode, final StorageType storageType, final UsagePurpose usagePurpose) {
+            Assert.hasText(locationBarcode, "locationBarcode는 필수입니다.");
+            Assert.notNull(storageType, "storageType는 필수입니다.");
+            Assert.notNull(usagePurpose, "usagePurpose는 필수입니다.");
+        }
+    }
+
     private class RegisterLocation {
-        public void request() {
-            throw new UnsupportedOperationException("RegisterLocation::request not implemented yet");
+        public void request(final Request request) {
+            final Location location = request.toDomain();
         }
 
         public record Request(String locationBarcode, StorageType storageType, UsagePurpose usagePurpose) {
+            public Location toDomain() {
+                return new Location(
+                        locationBarcode,
+                        storageType,
+                        usagePurpose
+                );
+            }
         }
     }
 }
