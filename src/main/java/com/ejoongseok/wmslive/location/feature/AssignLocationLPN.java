@@ -7,6 +7,8 @@ import com.ejoongseok.wmslive.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,8 +17,9 @@ class AssignLocationLPN {
     private final LocationRepository locationRepository;
     private final LPNRepository lpnRepository;
 
+    @PostMapping("/locations/assign-lpn")
     @Transactional
-    public void request(final Request request) {
+    public void request(@RequestBody final Request request) {
         final Location location = locationRepository.getByLocationBarcode(request.locationBarcode);
         final LPN lpn = lpnRepository.getByLpnBarcode(request.lpnBarcode);
 
