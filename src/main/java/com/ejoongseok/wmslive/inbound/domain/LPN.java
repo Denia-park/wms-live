@@ -2,6 +2,7 @@ package com.ejoongseok.wmslive.inbound.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "lpn")
 @Comment("LPN")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "lpnBarcode", callSuper = false)
 public class LPN {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
