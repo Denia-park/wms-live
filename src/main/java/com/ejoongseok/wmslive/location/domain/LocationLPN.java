@@ -20,4 +20,8 @@ public class LocationLPN {
     public LPN getLpn() {
         return this.lpn;
     }
+
+    public Long getInventoryQuantity() {
+        return inventoryQuantity;
+    }
 }
