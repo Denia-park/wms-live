@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "location")
@@ -56,13 +57,21 @@ public class Location {
     public void assignLPN(final LPN lpn) {
         Assert.notNull(lpn, "lpn는 필수입니다.");
 
-        locationLPNList.stream()
-                .filter(locationLPN -> locationLPN.matchLpnToLocation(lpn))
-                .findFirst()
+        findLocationLPNBy(lpn)
                 .ifPresentOrElse(
                         LocationLPN::increaseQuantity,
-                        () -> locationLPNList.add(new LocationLPN(this, lpn))
+                        () -> assignNewLPN(lpn)
                 );
 
+    }
+
+    private Optional<LocationLPN> findLocationLPNBy(final LPN lpn) {
+        return locationLPNList.stream()
+                .filter(locationLPN -> locationLPN.matchLpnToLocation(lpn))
+                .findFirst();
+    }
+
+    private boolean assignNewLPN(final LPN lpn) {
+        return locationLPNList.add(new LocationLPN(this, lpn));
     }
 }
