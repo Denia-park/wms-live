@@ -1,12 +1,15 @@
 package com.ejoongseok.wmslive.location.feature;
 
 import com.ejoongseok.wmslive.common.ApiTest;
+import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationLPN;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,19 +22,30 @@ class AssignLocationLPNTest extends ApiTest {
     @Autowired
     private LocationRepository locationRepository;
 
+    @BeforeEach
+    void setUpAssignLocationLPN() {
+        Scenario
+                .registerProduct().request()
+                .registerInbound().request()
+                .confirmInbound().request()
+                .registerLPN().request()
+                .registerLocation().request();
+    }
+
     @Test
     @DisplayName("로케이션에 LPN을 할당한다.")
+    @Transactional
     void assignLocationLPN() {
         //given
         final String locationBarcode = "A-1-1";
-        final String lpnBarcode = "LPN-1";
+        final String lpnBarcode = "LPN-0001";
         final AssignLocationLPN.Request request = new AssignLocationLPN.Request(
                 locationBarcode,
                 lpnBarcode
         );
 
         //when
-        assignLocationLPN.assignLocationLPN(request);
+        assignLocationLPN.request(request);
 
         //then
         final Location location = locationRepository.getByLocationBarcode(locationBarcode);
