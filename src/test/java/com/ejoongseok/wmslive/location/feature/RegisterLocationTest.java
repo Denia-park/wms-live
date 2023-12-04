@@ -83,6 +83,12 @@ class RegisterLocationTest {
         }
 
         public record Request(String locationBarcode, StorageType storageType, UsagePurpose usagePurpose) {
+            public Request {
+                Assert.hasText(locationBarcode, "locationBarcode는 필수입니다.");
+                Assert.notNull(storageType, "storageType는 필수입니다.");
+                Assert.notNull(usagePurpose, "usagePurpose는 필수입니다.");
+            }
+
             public Location toDomain() {
                 return new Location(
                         locationBarcode,
