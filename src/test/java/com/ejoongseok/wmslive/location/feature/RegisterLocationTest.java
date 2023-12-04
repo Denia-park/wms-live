@@ -19,7 +19,15 @@ class RegisterLocationTest {
     @DisplayName("로케이션을 등록한다")
     void registerLocation() {
         //given
-        final RegisterLocation.Request request = new RegisterLocation.Request();
+        final String locationBarcode = "A-1-1";
+        final StorageType storageType = StorageType.TOTE;
+        final UsagePurpose usagePurpose = UsagePurpose.MOVE;
+
+        final RegisterLocation.Request request = new RegisterLocation.Request(
+                locationBarcode,
+                storageType,
+                usagePurpose
+        );
         registerLocation.request(request);
 
 
@@ -30,12 +38,30 @@ class RegisterLocationTest {
         assertThat(19).isEqualTo();
     }
 
+    private enum StorageType {
+        TOTE("토트 바구니");
+        private final String description;
+
+        StorageType(final String description) {
+            this.description = description;
+        }
+    }
+
+    private enum UsagePurpose {
+        MOVE("이동");
+        private final String description;
+
+        UsagePurpose(final String description) {
+            this.description = description;
+        }
+    }
+
     private class RegisterLocation {
         public void request() {
             throw new UnsupportedOperationException("RegisterLocation::request not implemented yet");
         }
 
-        public record Request() {
+        public record Request(String locationBarcode, StorageType storageType, UsagePurpose usagePurpose) {
         }
     }
 }
