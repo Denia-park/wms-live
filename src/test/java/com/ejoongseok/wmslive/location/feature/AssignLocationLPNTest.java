@@ -16,8 +16,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AssignLocationLPNTest extends ApiTest {
-    private final AssignLocationLPNApi assignLocationLPNApi = new AssignLocationLPNApi();
-
     @Autowired
     private LocationRepository locationRepository;
 
