@@ -1,12 +1,32 @@
 package com.ejoongseok.wmslive.location.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+@Entity
+@Table(name = "location")
+@Comment("로케이션")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location {
-    private final String locationBarcode;
-    private final StorageType storageType;
-    private final UsagePurpose usagePurpose;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "location_no")
+    @Comment("로케이션 번호")
     private Long locationNo;
+    @Column(name = "location_barcode")
+    @Comment("로케이션 바코드")
+    private String locationBarcode;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "storage_type")
+    @Comment("보관 타입")
+    private StorageType storageType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "usage_purpose")
+    @Comment("보관 목적")
+    private UsagePurpose usagePurpose;
 
     public Location(final String locationBarcode,
                     final StorageType storageType,
@@ -22,13 +42,5 @@ public class Location {
         Assert.hasText(locationBarcode, "locationBarcode는 필수입니다.");
         Assert.notNull(storageType, "storageType는 필수입니다.");
         Assert.notNull(usagePurpose, "usagePurpose는 필수입니다.");
-    }
-
-    public void assignId(final Long locationNo) {
-        this.locationNo = locationNo;
-    }
-
-    public Long getLocationNo() {
-        return this.locationNo;
     }
 }
