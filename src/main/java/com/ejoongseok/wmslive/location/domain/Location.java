@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.location.domain;
 
+import com.ejoongseok.wmslive.inbound.domain.LPN;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -42,5 +43,9 @@ public class Location {
         Assert.hasText(locationBarcode, "locationBarcode는 필수입니다.");
         Assert.notNull(storageType, "storageType는 필수입니다.");
         Assert.notNull(usagePurpose, "usagePurpose는 필수입니다.");
+    }
+
+    public void assignLPN(final LPN lpn) {
+
     }
 }
