@@ -1,24 +1,21 @@
 package com.ejoongseok.wmslive.location.feature;
 
+import com.ejoongseok.wmslive.common.ApiTest;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
 import com.ejoongseok.wmslive.location.domain.StorageType;
 import com.ejoongseok.wmslive.location.domain.UsagePurpose;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RegisterLocationTest {
-
-    private RegisterLocation registerLocation;
+class RegisterLocationTest extends ApiTest {
+    @Autowired
     private LocationRepository locationRepository;
-
-    @BeforeEach
-    void setUp() {
-        locationRepository = new LocationRepository();
-        registerLocation = new RegisterLocation(locationRepository);
-    }
 
     @Test
     @DisplayName("로케이션을 등록한다")
@@ -34,8 +31,13 @@ class RegisterLocationTest {
                 usagePurpose
         );
 
-        //when
-        registerLocation.request(request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/locations")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
 
         //then
         assertThat(locationRepository.findAll()).hasSize(1);
