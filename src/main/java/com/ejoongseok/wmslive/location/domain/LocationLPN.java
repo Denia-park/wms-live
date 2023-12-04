@@ -29,13 +29,13 @@ public class LocationLPN {
     @Comment("재고 수량")
     private Long inventoryQuantity;
 
-    public LocationLPN(final Location location, final LPN lpn) {
+    LocationLPN(final Location location, final LPN lpn) {
         this.location = location;
         this.lpn = lpn;
         this.inventoryQuantity = 1L;
     }
 
-    public void increaseQuantity() {
+    void increaseQuantity() {
         this.inventoryQuantity++;
     }
 
