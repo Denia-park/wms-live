@@ -28,6 +28,7 @@ public class Location {
     @Column(name = "usage_purpose")
     @Comment("보관 목적")
     private UsagePurpose usagePurpose;
+//    private List<LocationLPN> locationLPNList = new ArrayList<>();
 
     public Location(final String locationBarcode,
                     final StorageType storageType,
@@ -46,6 +47,9 @@ public class Location {
     }
 
     public void assignLPN(final LPN lpn) {
+        Assert.notNull(lpn, "lpn는 필수입니다.");
+
+//        locationLPNList
 
     }
 }
