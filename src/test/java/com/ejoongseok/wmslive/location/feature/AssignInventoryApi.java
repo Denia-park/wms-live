@@ -5,23 +5,23 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.springframework.http.HttpStatus;
 
-public class AssignLocationLPNApi {
+public class AssignInventoryApi {
     private String locationBarcode = "A-1-1";
     private String lpnBarcode = "LPN-0001";
 
-    public AssignLocationLPNApi locationBarcode(String locationBarcode) {
+    public AssignInventoryApi locationBarcode(String locationBarcode) {
         this.locationBarcode = locationBarcode;
         return this;
     }
 
-    public AssignLocationLPNApi lpnBarcode(String lpnBarcode) {
+    public AssignInventoryApi lpnBarcode(String lpnBarcode) {
         this.lpnBarcode = lpnBarcode;
         return this;
     }
 
     public Scenario request() {
         //given
-        final AssignLocationLPN.Request request = new AssignLocationLPN.Request(
+        final AssignInventory.Request request = new AssignInventory.Request(
                 locationBarcode,
                 lpnBarcode
         );
@@ -31,7 +31,7 @@ public class AssignLocationLPNApi {
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when()
-                .post("/locations/assign-lpn")
+                .post("/locations/assign-inventory")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
 

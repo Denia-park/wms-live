@@ -17,7 +17,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location {
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<LocationLPN> locationLPNList = new ArrayList<>();
+    private final List<Inventory> inventories = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "location_no")
@@ -51,28 +51,28 @@ public class Location {
         Assert.notNull(usagePurpose, "usagePurpose는 필수입니다.");
     }
 
-    public List<LocationLPN> getLocationLPNList() {
-        return locationLPNList;
+    public List<Inventory> getInventories() {
+        return inventories;
     }
 
-    public void assignLPN(final LPN lpn) {
+    public void assignInventory(final LPN lpn) {
         Assert.notNull(lpn, "lpn는 필수입니다.");
 
-        findLocationLPNBy(lpn)
+        findInventoryBy(lpn)
                 .ifPresentOrElse(
-                        LocationLPN::increaseQuantity,
+                        Inventory::increaseQuantity,
                         () -> assignNewLPN(lpn)
                 );
 
     }
 
-    private Optional<LocationLPN> findLocationLPNBy(final LPN lpn) {
-        return locationLPNList.stream()
-                .filter(locationLPN -> locationLPN.matchLpnToLocation(lpn))
+    private Optional<Inventory> findInventoryBy(final LPN lpn) {
+        return inventories.stream()
+                .filter(inventory -> inventory.matchLpnToLocation(lpn))
                 .findFirst();
     }
 
     private boolean assignNewLPN(final LPN lpn) {
-        return locationLPNList.add(new LocationLPN(this, lpn));
+        return inventories.add(new Inventory(this, lpn));
     }
 }
