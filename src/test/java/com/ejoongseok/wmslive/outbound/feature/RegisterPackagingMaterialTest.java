@@ -1,23 +1,20 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.common.ApiTest;
 import com.ejoongseok.wmslive.outbound.domain.MaterialType;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialRepository;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RegisterPackagingMaterialTest {
-
-    private RegisterPackagingMaterial registerPackagingMaterial;
+class RegisterPackagingMaterialTest extends ApiTest {
+    @Autowired
     private PackagingMaterialRepository pacakageMaterialRepository;
-
-    @BeforeEach
-    void setUp() {
-        pacakageMaterialRepository = new PackagingMaterialRepository();
-        registerPackagingMaterial = new RegisterPackagingMaterial(pacakageMaterialRepository);
-    }
 
     @Test
     @DisplayName("포장재를 등록한다.")
@@ -46,7 +43,16 @@ class RegisterPackagingMaterialTest {
                 maxWeightInGrams,
                 MaterialType.CORRUGATED_BOX
         );
-        registerPackagingMaterial.request(request);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/packaging-materials")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+
+//        registerPackagingMaterial.request(request);
 
         assertThat(pacakageMaterialRepository.findAll()).hasSize(1);
     }
