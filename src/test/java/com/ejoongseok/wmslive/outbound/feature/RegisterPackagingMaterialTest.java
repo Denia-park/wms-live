@@ -30,5 +30,8 @@ public class RegisterPackagingMaterialTest {
     }
 
     private class RegisterPackagingMaterial {
+        public void request() {
+            
+        }
     }
 }
