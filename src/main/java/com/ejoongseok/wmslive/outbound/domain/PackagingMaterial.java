@@ -1,15 +1,39 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+@Entity
+@Table(name = "packaging_material")
+@Comment("포장재")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PackagingMaterial {
-    private final String name;
-    private final String code;
-    private final PackagingMaterialDimension packagingMaterialDimension;
-    private final Long weightInGrams;
-    private final Long maxWeightInGrams;
-    private final MaterialType materialType;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "packaging_material_no")
+    @Comment("포장재 번호")
     private Long packagingMaterialNo;
+    @Column(name = "name", nullable = false)
+    @Comment("포장재 이름")
+    private String name;
+    @Column(name = "code", nullable = false)
+    @Comment("포장재 코드")
+    private String code;
+    @Embedded
+    private PackagingMaterialDimension packagingMaterialDimension;
+    @Column(name = "weight_in_grams", nullable = false)
+    @Comment("무게(g)")
+    private Long weightInGrams;
+    @Column(name = "max_weight_in_grams", nullable = false)
+    @Comment("최대 무게(g)")
+    private Long maxWeightInGrams;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "material_type", nullable = false)
+    @Comment("포장재 종류")
+    private MaterialType materialType;
 
     public PackagingMaterial(final String name,
                              final String code,
