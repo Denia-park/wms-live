@@ -19,7 +19,8 @@ public class RegisterPackagingMaterialTest {
     @DisplayName("포장재를 등록한다.")
     void registerPackagingMaterial() {
         //given
-        registerPackagingMaterial.request();
+        final RegisterPackagingMaterial.Request request = new RegisterPackagingMaterial.Request();
+        registerPackagingMaterial.request(request);
 
 
         //when
@@ -30,8 +31,11 @@ public class RegisterPackagingMaterialTest {
     }
 
     private class RegisterPackagingMaterial {
-        public void request() {
-            
+        public void request(final Request request) {
+
+        }
+
+        public record Request() {
         }
     }
 }
