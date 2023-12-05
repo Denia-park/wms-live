@@ -8,7 +8,7 @@ public class PackagingMaterial {
     private final PackagingMaterialDimension packagingMaterialDimension;
     private final Long weightInGrams;
     private final Long maxWeightInGrams;
-    private final MaterialType corrugatedBox;
+    private final MaterialType materialType;
     private Long packagingMaterialNo;
 
     public PackagingMaterial(final String name,
@@ -16,18 +16,18 @@ public class PackagingMaterial {
                              final PackagingMaterialDimension packagingMaterialDimension,
                              final Long weightInGrams,
                              final Long maxWeightInGrams,
-                             final MaterialType corrugatedBox) {
-        validateConstructor(name, code, weightInGrams, maxWeightInGrams, corrugatedBox);
+                             final MaterialType materialType) {
+        validateConstructor(name, code, weightInGrams, maxWeightInGrams, materialType);
 
         this.name = name;
         this.code = code;
         this.packagingMaterialDimension = packagingMaterialDimension;
         this.weightInGrams = weightInGrams;
         this.maxWeightInGrams = maxWeightInGrams;
-        this.corrugatedBox = corrugatedBox;
+        this.materialType = materialType;
     }
 
-    private void validateConstructor(final String name, final String code, final Long weightInGrams, final Long maxWeightInGrams, final MaterialType corrugatedBox) {
+    private void validateConstructor(final String name, final String code, final Long weightInGrams, final Long maxWeightInGrams, final MaterialType materialType) {
         Assert.hasText(name, "포장재 이름은 필수입니다.");
         Assert.hasText(code, "포장재 코드는 필수입니다.");
         Assert.notNull(weightInGrams, "무게는 필수입니다.");
@@ -38,7 +38,7 @@ public class PackagingMaterial {
         if (maxWeightInGrams < 1L) {
             throw new IllegalArgumentException("최대 무게는 1g 이상이어야 합니다.");
         }
-        Assert.notNull(corrugatedBox, "포장재 종류는 필수입니다.");
+        Assert.notNull(materialType, "포장재 종류는 필수입니다.");
     }
 
     public void assignNo(final Long packagingMaterialNo) {
