@@ -5,8 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class RegisterPackagingMaterialTest {
 
     private RegisterPackagingMaterial registerPackagingMaterial;
@@ -43,12 +41,7 @@ public class RegisterPackagingMaterialTest {
         );
         registerPackagingMaterial.request(request);
 
-
-        //when
-
-
-        //then
-        assertThat(19).isEqualTo();
+        //        assertThat(pacakageMaterialRepository.findAll()).hasSize(1);
     }
 
     private enum MaterialType {
@@ -62,8 +55,12 @@ public class RegisterPackagingMaterialTest {
     }
 
     private class RegisterPackagingMaterial {
-        public void request(final Request request) {
+        private PackagingMaterialRepository packagingMaterialRepository;
 
+        public void request(final Request request) {
+            PackagingMaterial packagingMaterial = request.toDomain();
+
+            packagingMaterialRepository.save(packagingMaterial);
         }
 
         public record Request(String name, String code, Long innerWidthInMillimeters, Long innerHeightInMillimeters,
@@ -107,6 +104,16 @@ public class RegisterPackagingMaterialTest {
                 }
                 Assert.notNull(corrugatedBox, "포장재 종류는 필수입니다.");
             }
+
+            public PackagingMaterial toDomain() {
+                return new PackagingMaterial();
+            }
         }
+    }
+
+    private class PackagingMaterial {
+    }
+
+    private class PackagingMaterialRepository {
     }
 }
